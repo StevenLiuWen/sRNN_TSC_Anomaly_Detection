@@ -5,4 +5,4 @@ All codes will be released soon.
 
 
 ## ShanghaiTechCampus Anomaly Detection Dataset
-[Download](https://1drv.ms/f/s!Al9BNsNJ4wU3qAldicKwk5JWrSlK)
+[Download link](https://1drv.ms/f/s!Al9BNsNJ4wU3qAldicKwk5JWrSlK)
