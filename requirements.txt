@@ -1,0 +1,7 @@
+h5py==2.7.1
+numpy==1.14.0
+scipy==0.19.1
+tensorflow_gpu==1.4.0
+skimage==0.0
+tensorflow==1.4.0
+PyYAML==3.12
