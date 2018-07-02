@@ -2,7 +2,7 @@
 A Revisit of Sparse Coding Based Anomaly Detection in Stacked RNN Framework (iccv 2017)
 
 # two stream features on CUHK Avenue dataset
-[Download link: BaiduYunPan](), password: 
+[Download link: BaiduYunPan](https://pan.baidu.com/s/1G-msaTm7b_ZXsyZhrJYGnQ), password: jpb3 
 
 ## ShanghaiTechCampus Anomaly Detection Dataset
 [Download link: OneDrive](https://onedrive.live.com/?authkey=%21AMqh2fTSemfrokE&id=3705E349C336415F%215109&cid=3705E349C336415F), download the shanghaitech.tar.gz file
