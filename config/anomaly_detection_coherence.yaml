@@ -1,0 +1,35 @@
+display: 10
+snapshot: 1000
+summary: 100
+n_hidden: 2048
+n_input: 2048
+n_output: 2048
+n_gw: 512
+gama: 1.0
+lambda1: 0.1
+lambda2: 0.01
+K: 3
+seed: 2017
+learning_rate: 0.00001
+time_steps: 10
+batch_size: 4
+n_iter: 20000
+train_videos_txt: txt/{}_feature_training.txt
+test_videos_txt: txt/{}_feature_testing.txt
+train_feature_path: ./dataset/anomaly_detection/{}/training/224/features/twostream_{}/
+test_feature_path: ./dataset/anomaly_detection/{}/testing/224/features/twostream_{}/
+dataset: shanghaitech
+twostream_model: res152_7x7
+save_results_path: results/ad_coherence
+ckpt_path: ckpt/ad_coherence
+log_path: log/ad_coherence
+prefix: info_{}_{}_{}_K_{}_n_hidden_{}_lam1_{}_lam2_{}_T_{} # dataset/twostream_model/model_type/K/n_hidden/lam1/lam2/T
+test_loop: 20000
+scales:
+  - 1
+  - 2
+  - 4
+feature_size: 7.0
+model_type: TSC
+weight_decay: 0.0
+gpu: !!str 1
