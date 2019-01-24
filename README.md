@@ -46,7 +46,9 @@ If the download shell does not work (I guess the download link in shell script i
 and tar each tar.gz file, and move them in to **Data** folder.
 
 ## 3. Extracting feature
- Download [twostream action recognition model](https://github.com/feichtenhofer/twostreamfusion), then put it into extract_feature folder
+ Download [twostream action recognition model](https://github.com/feichtenhofer/twostreamfusion), then put it into extract_feature folder. Please infer the instructions of this model and download pretrained models.
+ Modidy the root in extract_feature/extract_feature_twostream/extract_feature.m
+ run extract_feature.m using MATLAB
 
 ## 4. Training 
 
