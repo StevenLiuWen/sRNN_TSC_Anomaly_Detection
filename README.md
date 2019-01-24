@@ -24,7 +24,7 @@ PyYAML==3.13
 ```shell
 pip install -r requirements.txt
 
-pip install tensorflow-gpu==1.4.1
+pip install tensorflow-gpu==1.11.0
 ```
 * Other libraries
 ```code
