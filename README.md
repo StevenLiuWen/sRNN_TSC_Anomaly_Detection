@@ -52,9 +52,6 @@ and tar each tar.gz file, and move them in to **Data** folder.
 
 ## 4. Training 
 
-
-## Notes
-The flow loss (temporal loss) module is based on [a TensorFlow implementation of FlowNet2](https://github.com/sampepose/flownet2-tf). Thanks for their nice work.
 ## Citation
 If you find this useful, please cite our work as follows:
 ```code
