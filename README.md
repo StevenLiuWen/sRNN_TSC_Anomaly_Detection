@@ -1,7 +1,7 @@
 # A revisit of sparse coding based anomaly detection in stacked rnn framework
-This repo is the official open source of [A revisit of sparse coding based anomaly detection in stacked rnn framework, ICCV 2017](https://arxiv.org/pdf/1712.09867.pdf) by Wen Liu, Weixin Lluo, Dongze Lian and Shenghua Gao. 
+This repo is the official open source of [A revisit of sparse coding based anomaly detection in stacked rnn framework, ICCV 2017]
 
-It is implemented in tensorflow. Please follow the instructions to run the code.
+It is implemented on tensorflow. Please follow the instructions to run the code.
 
 ## 1. Installation (Anaconda with python3.6 installation is recommended)
 * Install 3rd-package dependencies of python (listed in requirements.txt)
@@ -66,17 +66,3 @@ If you find this useful, please cite our work as follows:
 }
 ```
 
-
-
-# sRNN_TSC_Anomaly_Detection
-A Revisit of Sparse Coding Based Anomaly Detection in Stacked RNN Framework (iccv 2017)
-
-# two stream features on CUHK Avenue dataset
-[Download link: BaiduYunPan](https://pan.baidu.com/s/1G-msaTm7b_ZXsyZhrJYGnQ), password: jpb3 
-
-## ShanghaiTechCampus Anomaly Detection Dataset
-[Download link: OneDrive](https://onedrive.live.com/?authkey=%21AMqh2fTSemfrokE&id=3705E349C336415F%215109&cid=3705E349C336415F), download the shanghaitech.tar.gz file
-
-[Download link: BaiduYunPan](http://pan.baidu.com/s/1bpIZTr5), password: a20y
-
-Run on Python3, please.
