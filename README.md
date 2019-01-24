@@ -46,6 +46,7 @@ If the download shell does not work (I guess the download link in shell script i
 and tar each tar.gz file, and move them in to **Data** folder.
 
 ## 3. Extracting feature
+ Download [twostream action recognition model](https://github.com/feichtenhofer/twostreamfusion), then put it into extract_feature folder
 
 ## 4. Training 
 
