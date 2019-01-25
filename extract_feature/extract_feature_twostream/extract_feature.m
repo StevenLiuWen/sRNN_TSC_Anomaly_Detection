@@ -7,7 +7,7 @@ run vl_setupnn
 
 %%%%%%%%%%%%%%%%%%%%%%%%  setup here %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % only need to setup these 4 parameters
-root = '/p300';
+root = '../../';
 dataset = 'shanghaitech';
 res_type = '152';
 gpu_id = 3; % id > 0
