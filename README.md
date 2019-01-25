@@ -36,9 +36,17 @@ Please manually download all datasets [ped2.tar.gz, avenue.tar.gz and shanghaite
 and tar -xv each tar.gz file. Folders will be like dataset/anomaly_detection/avenue/....
 
 ## 3. Extracting feature
- Download [twostream action recognition model](https://github.com/feichtenhofer/twostreamfusion), then put it into extract_feature folder. Please infer the instructions of this model and download pretrained models.
+```shell
+cd extract_feature
+git clone https://github.com/feichtenhofer/twostreamfusion.git
+```
+ Please infer the instructions of the twostreamfusion model and download pretrained models.
  
- Modidy the root in extract_feature/extract_feature_twostream/extract_feature.m
+ ```shell
+cd extract_feature/extract_feature_twostream
+```
+
+ Modidy the root in extract_feature.m
  
  run extract_feature.m using MATLAB
 
