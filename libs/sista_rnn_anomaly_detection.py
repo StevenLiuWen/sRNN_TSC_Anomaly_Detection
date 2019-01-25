@@ -107,7 +107,6 @@ class sista_rnn_anomaly_detection(base):
             for video in f_lines:
                 video = video.strip('\n')
                 f = h5py.File(os.path.join(self.config['test_feature_path'], video), 'r')
-                rgb_data = np.transpose(f['rgb'], [3, 2, 1, 0])
                 num_frames = rgb_data.shape[0]
                 # rgb_data_new = []
                 # for index, data in enumerate(rgb_data):

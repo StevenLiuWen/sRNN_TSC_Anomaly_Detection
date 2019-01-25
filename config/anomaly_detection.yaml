@@ -5,8 +5,8 @@ n_hidden: 2048
 n_input: 2048
 n_output: 2048
 gama: 1.0
-lambda1: 0.05 # 0.1 0.2 0.3 0.4
-lambda2: 0.05 # 0 0.05 0.1 0.15 0.2
+lambda1: 0.1 # 0.1 0.2 0.3 0.4
+lambda2: 0.1 # 0 0.05 0.1 0.15 0.2
 K: 3
 seed: 2017
 learning_rate: 0.0001

@@ -69,31 +69,4 @@ if __name__ == '__main__':
     with open(sys.argv[1], 'r') as stream:
         config = yaml.load(stream)
 
-
-    class NoDaemonProcess(multiprocessing.Process):
-        # make 'daemon' attribute always return False
-        def _get_daemon(self):
-            return False
-
-        def _set_daemon(self, value):
-            pass
-
-        daemon = property(_get_daemon, _set_daemon)
-
-
-    # We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
-    # because the latter is only a wrapper function, not a proper class.
-    class NoDaemonProcessPool(multiprocessing.pool.Pool):
-        Process = NoDaemonProcess
-
-    pool = NoDaemonProcessPool(16)
-    configs = []
-    for index1, l1 in enumerate([0.3, 0.4, 0.5, 0.6]):
-        for index2, l2 in enumerate([0.3, 0.4, 0.5, 0.6]):
-            c = config.copy()
-            c['lambda1'] = l1
-            c['lambda2'] = l2
-            c['gpu'] = str(index2%4)
-            configs.append(c)
-    #pool.map(main, configs)
     main(config)

@@ -1,6 +1,3 @@
-# import pydevd
-# pydevd.settrace('10.19.125.27', port=12345, stdoutToServer=True, stderrToServer=True)
-
 import numpy as np
 from concurrent import futures
 from threading import Thread
@@ -23,14 +20,9 @@ clip_feature = False
 def readHDF5(video_idx, random_idx, key):
     with h5py.File(video_idx, 'r') as f:
         if clip_feature:
-            #print(max(0, random_idx - clip_length // 2), min(f[key].shape[3], random_idx + clip_length / 2))
-            #batch_features = np.concatenate((f[key][:, :, :, random_idx], np.mean(f[key][:, :, :, max(0, random_idx - clip_length // 2):min(f[key].shape[3], random_idx + clip_length // 2)], axis=3)), axis=0)
             batch_features = np.mean(f[key][:, :, :, max(0, random_idx - clip_length // 2):min(f[key].shape[3], random_idx + clip_length // 2)], axis=3)
-            #batch_features = f[key][:, :, :, min(f[key].shape[3] - 1, random_idx + 1)] - f[key][:, :, :, random_idx]
         else:
-            #batch_features = f[key][:, :, :, random_idx]
             batch_features = f[key][random_idx]
-        #batch_features = np.transpose(batch_features, [2, 1, 0])
         multi_patch_features = np.zeros([total_patches, batch_features.shape[2]],dtype=np.float32)
         t = 0
         for s in scales:

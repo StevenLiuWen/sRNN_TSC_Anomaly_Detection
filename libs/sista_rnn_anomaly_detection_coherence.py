@@ -121,13 +121,8 @@ class sista_rnn_anomaly_detection(base):
                 print('write summary')
 
             end = datetime.datetime.now()
-            #print((end - start).total_seconds())
-            #print(list(run_np['losses'].values())[0])
             losses.append(list(run_np['losses'].values())[0])
 
-        with open(str(self.config['K']) + '.csv', 'w') as f:
-            writer = csv.writer(f)
-            writer.writerow(losses)
 
     def test(self):
         self.sess.run(tf.global_variables_initializer())
@@ -137,11 +132,8 @@ class sista_rnn_anomaly_detection(base):
 
         # load sista-rnn model parameters
         test_loop = self.config['snapshot']
-        # test_loop = 14000
-        # self.config['test_loop'] = 14000
         clip_length = 4
         while(test_loop <= self.config['test_loop']):
-        #for test_loop in range(self.config['snapshot'], self.config['test_loop'] + self.config['snapshot'], self.config['snapshot']):
             ckpt_name = os.path.join(self.config['ckpt_path'], self.config['prefix'] + '-' + str(test_loop))
             while(not os.path.exists(ckpt_name+'.index')):
                 print('I am sleeping', ckpt_name)
@@ -161,7 +153,6 @@ class sista_rnn_anomaly_detection(base):
             for video in f_lines:
                 video = video.strip('\n')
                 f = h5py.File(os.path.join(self.config['test_feature_path'], video), 'r')
-                #rgb_data = np.transpose(f['rgb'], [3, 2, 1, 0])
                 rgb_data = f['rgb']
                 num_frames = rgb_data.shape[0]
                 # rgb_data_new = []
@@ -200,14 +191,10 @@ class sista_rnn_anomaly_detection(base):
                                                           self.input[1]: rgb})
                     pre_input = rgb
                     sub_video_loss[idx] = loss_np
-                    # feature.append(rgb)
-                    # alpha.append(h_np)
-                    # gx.append(gx_np)
 
                     end = datetime.datetime.now()
 
                     print('{} / {}, loss = {}'.format(video, idx, loss_np))
-                    #print((end - start).total_seconds())
 
                 # reset h0 for the next test video
                 self.sess.run(reset_h_0_init_Tensor)
@@ -220,17 +207,10 @@ class sista_rnn_anomaly_detection(base):
                     total_loss.append(sub_video_loss[:, 0])
                 elif self.config['dataset'] == 'avenue' or self.config['dataset'] == 'lvv1' or self.config['dataset'] == 'ped1':
                     total_loss.append(sub_video_loss)
-                #total_loss.append(np.mean(sub_video_loss, axis=1))
-                #features.append(feature)
-                #alphas.append(alpha)
-                #gxs.append(gx)
 
             results = {
                 'dataset': self.config['dataset'],
                 'mse': total_loss,
-                #'feature': features,
-                #'alpha': alphas,
-                #'delta': gxs
             }
 
             with open(self.config['save_results_path'] + '_{}.bin'.format(test_loop), 'wb') as save_file:
