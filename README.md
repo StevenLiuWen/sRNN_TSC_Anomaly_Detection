@@ -46,11 +46,37 @@ git clone https://github.com/feichtenhofer/twostreamfusion.git
 cd extract_feature/extract_feature_twostream
 ```
 
- Modidy the root in extract_feature.m
+ Modidy the root/dataset/res_type/gpu_id in extract_feature.m
  
  run extract_feature.m using MATLAB
 
 ## 4. Training 
+For the ICCV version:
+ ```shell
+python run_anomaly_detection.py config/anomaly_detection.yaml 0
+```
+
+For the TPAMI version:
+ ```shell
+python run_anomaly_detection_coherence.py config/anomaly_detection_coherence.yaml 0
+```
+
+## 5. Testing 
+For the ICCV version:
+ ```shell
+python run_anomaly_detection.py config/anomaly_detection.yaml 1
+```
+
+For the TPAMI version:
+ ```shell
+python run_anomaly_detection_coherence.py config/anomaly_detection_coherence.yaml 1
+```
+
+## 6. Evaluation
+After running the testing scripts, you also need to run the evaluation.py to calculate AUC
+ ```shell
+python evaluate.py --file=results/ad_coherence/info_avenue_\* --type=compute_auc
+```
 
 ## Citation
 If you find this useful, please cite our work as follows:
