@@ -18,7 +18,7 @@ train_videos_txt: txt/{}_feature_training.txt
 test_videos_txt: txt/{}_feature_testing.txt
 train_feature_path: ./dataset/anomaly_detection/{}/training/224/features/twostream_{}/
 test_feature_path: ./dataset/anomaly_detection/{}/testing/224/features/twostream_{}/
-dataset: shanghaitech
+dataset: avenue
 twostream_model: res152_7x7
 save_results_path: results/ad_coherence
 ckpt_path: ckpt/ad_coherence
@@ -30,6 +30,6 @@ scales:
   - 2
   - 4
 feature_size: 7.0
-model_type: TSC
+model_type: AE
 weight_decay: 0.0
-gpu: !!str 1
+gpu: !!str 0

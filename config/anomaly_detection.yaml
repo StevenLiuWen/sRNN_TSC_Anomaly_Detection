@@ -17,8 +17,8 @@ train_videos_txt: txt/{}_feature_train.txt
 test_videos_txt: txt/{}_feature_test.txt
 train_feature_path: /home/luowx/datasets/anomaly_detection/{}/training/224/features/twostream_{}/
 test_feature_path: /home/luowx/datasets/anomaly_detection/{}/testing/224/features/twostream_{}/motion
-dataset: moving_mnist
-twostream_model: res50_7x7
+dataset: avenue
+twostream_model: res152_7x7
 save_results_path: results/ad
 ckpt_path: ckpt/ad
 log_path: log/ad
@@ -31,4 +31,4 @@ scales:
 feature_size: 7.0
 model_type: AE
 weight_decay: 0.0
-gpu: !!str 2
+gpu: !!str 0
