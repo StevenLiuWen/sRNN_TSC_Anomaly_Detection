@@ -90,6 +90,13 @@ If you find this useful, please cite our work as follows:
   pages={3},
   year={2017}
 }
+@article{luo2019video,
+  title={Video Anomaly Detection With Sparse Coding Inspired Deep Neural Networks},
+  author={Luo, Weixin and Liu, Wen and Lian, Dongze and Tang, Jinhui and Duan, Lixin and Peng, Xi and Gao, Shenghua},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  year={2019},
+  publisher={IEEE}
+}
 ```
 
 
