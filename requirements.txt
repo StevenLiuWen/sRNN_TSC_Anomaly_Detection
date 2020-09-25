@@ -9,5 +9,5 @@ tensorflow_gpu==1.11.0
 seaborn==0.8.1
 skimage==0.0
 scikit_learn==0.20.2
-tensorflow==1.12.0
+tensorflow==1.15.4
 PyYAML==3.13
