@@ -1,2 +1,3 @@
+*.cvs
 .pyc
 .idea

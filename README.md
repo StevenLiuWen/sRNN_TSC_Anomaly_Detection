@@ -53,23 +53,38 @@ cd extract_feature/extract_feature_twostream
 ## 4. Training 
 For the ICCV version:
  ```shell
-python run_anomaly_detection.py config/anomaly_detection.yaml 0
+python run_anomaly_detection.py --config_file config/anomaly_detection.yaml --mode 0 --gpu 0
 ```
 
 For the TPAMI version:
  ```shell
-python run_anomaly_detection_coherence.py config/anomaly_detection_coherence.yaml 0
+# training on ped2
+python run_anomaly_detection_coherence.py --config_file config/ped2_anomaly_detection_coherence.yaml --mode 0 --gpu 0
+
+# training on avenue
+python run_anomaly_detection_coherence.py --config_file config/avenue_anomaly_detection_coherence.yaml --mode 0 --gpu 0
+
+# training on shanghaitech
+python run_anomaly_detection_coherence.py --config_file config/shanghaitech_anomaly_detection_coherence.yaml --mode 0 --gpu 0
 ```
 
 ## 5. Testing 
 For the ICCV version:
  ```shell
-python run_anomaly_detection.py config/anomaly_detection.yaml 1
+python run_anomaly_detection.py --config_file config/anomaly_detection.yaml --mode 1 --gpu 0
 ```
 
 For the TPAMI version:
  ```shell
-python run_anomaly_detection_coherence.py config/anomaly_detection_coherence.yaml 1
+# testing on ped2
+python run_anomaly_detection_coherence.py --config_file config/ped2_anomaly_detection_coherence.yaml --mode 1 --gpu 0
+
+# testing on avenue
+python run_anomaly_detection_coherence.py --config_file config/avenue_anomaly_detection_coherence.yaml --mode 1 --gpu 0
+
+# testing on shanghaitech
+python run_anomaly_detection_coherence.py --config_file config/shanghaitech_anomaly_detection_coherence.yaml --mode 1 --gpu 0
+
 ```
 
 ## 6. Evaluation

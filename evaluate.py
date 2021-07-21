@@ -2,20 +2,14 @@ from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-import os
-import sys
 import argparse
 from sklearn import metrics
 from six.moves import cPickle
-import pickle
 from tools.ground_truth import GroundTruthLoader
 import glob
-import csv
-
-#os.environ['THEANO_FLAGS'] = "device=cpu"
 
 
-class RecordResult():
+class RecordResult(object):
     def __init__(self, fpr=None, tpr=None, auc=-np.inf, dataset=None, loss_file=None):
         self.fpr = fpr
         self.tpr = tpr
@@ -26,7 +20,6 @@ class RecordResult():
     def __lt__(self, other):
         return self.auc < other.auc
 
-
     def __str__(self):
         return 'dataset = {}, loss file = {}, auc = {}'.format(self.dataset, self.loss_file, self.auc)
 
@@ -36,7 +29,7 @@ def parser_args():
 
     parser.add_argument('--file', type=str, help='the path of loss file.')
     parser.add_argument('--type', type=str, default='compute_auc', help='the type of evaluation, '
-        'choosing type is: plot_roc, compute_auc, test_func\n, the default type is compute_auc')
+                                                                        'choosing type is: plot_roc, compute_auc, test_func\n, the default type is compute_auc')
     return parser.parse_args()
 
 
@@ -71,7 +64,6 @@ def load_loss_gt(loss_file):
 
 
 def plot_roc(loss_file):
-
     optimal_results = compute_auc(loss_file)
 
     # the name of dataset, loss, and ground truth
@@ -95,8 +87,8 @@ def plot_roc(loss_file):
         distance = (distance - distance.min()) / (distance.max() - distance.min())
         distance = 1 - distance
 
-        #print(distance.max())
-        #print(distance.min())
+        # print(distance.max())
+        # print(distance.min())
 
         scores = np.concatenate((scores, distance), axis=0)
         labels = np.concatenate((labels, gt[i]), axis=0)
@@ -106,9 +98,8 @@ def plot_roc(loss_file):
     fpr, tpr, thresholds = metrics.roc_curve(labels, scores, pos_label=0)
     auc = metrics.auc(fpr, tpr)
 
-
-    #np.savetxt('ped2_scores.txt', scores)
-    #np.savetxt('ped2_labels.txt', labels)
+    # np.savetxt('ped2_scores.txt', scores)
+    # np.savetxt('ped2_labels.txt', labels)
 
     # plot the scores
     total = scores.shape[0]
@@ -139,9 +130,9 @@ def plot_roc(loss_file):
         currentAxis.add_patch(Rectangle((cur_len, 0.0), 1, 1.0, color='green', alpha=1))
 
     plt.annotate('AUC = ' + str(auc),
-             xy=(total/2, 0.5), xycoords='data',
-             xytext=(-90, -50), textcoords='offset points', fontsize=15,
-             arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=.2"))
+                 xy=(total / 2, 0.5), xycoords='data',
+                 xytext=(-90, -50), textcoords='offset points', fontsize=15,
+                 arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=.2"))
 
     plt.title(dataset)
     plt.ylim(0)
@@ -151,14 +142,14 @@ def plot_roc(loss_file):
 
     return optimal_results
 
-def compute_auc(loss_file):
 
-    #if not os.path.isdir(loss_file):
+def compute_auc(loss_file):
+    # if not os.path.isdir(loss_file):
     #    loss_file_list = [loss_file]
-    #else:
+    # else:
     #    loss_file_list = os.listdir(loss_file)
     loss_file_list = glob.glob(loss_file)
-    #loss_file_list = [os.path.join(loss_file, sub_loss_file) for sub_loss_file in loss_file_list]
+    # loss_file_list = [os.path.join(loss_file, sub_loss_file) for sub_loss_file in loss_file_list]
     print(loss_file_list)
     optimal_results = RecordResult()
     for sub_loss_file in loss_file_list:
@@ -174,11 +165,12 @@ def compute_auc(loss_file):
         for i in range(num_videos):
             distance = mse_records[i]
 
-            distance -= distance.min()    # distances = (distance - min) / (max - min)
+            distance -= distance.min()  # distances = (distance - min) / (max - min)
             distance /= distance.max()
             distance = 1 - distance
-	    #distance = distance[:,0]
+            # distance = distance[:, 0]
 
+            print(scores.shape, distance.shape)
             scores = np.concatenate((scores, distance), axis=0)
             labels = np.concatenate((labels, gt[i]), axis=0)
 
@@ -186,26 +178,27 @@ def compute_auc(loss_file):
             continue
         fpr, tpr, thresholds = metrics.roc_curve(labels, scores, pos_label=0)
         auc = metrics.auc(fpr, tpr)
-	#eer = brentq(lambda x : 1. - x - interp1d(fpr, tpr)(x), 0., 1.)
-	#thresh = interp1d(fpr, thresholds)(eer)
+        # eer = brentq(lambda x : 1. - x - interp1d(fpr, tpr)(x), 0., 1.)
+        # thresh = interp1d(fpr, thresholds)(eer)
         results = RecordResult(fpr, tpr, auc, dataset, sub_loss_file)
 
         if optimal_results < results:
             optimal_results = results
 
         print(results)
-        #with open(sub_loss_file+'.csv', 'w') as f:
+        # with open(sub_loss_file+'.csv', 'w') as f:
         #    writer = csv.writer(f)
         #    writer.writerow(fpr)
         #    writer.writerow(tpr)
 
     return optimal_results
 
+
 def compute_eer(loss_file):
     pass
 
-def test_func(*args):
 
+def test_func(*args):
     # simulate testing on CUHK AVENUE dataset
     dataset = GroundTruthLoader.AVENUE
 
@@ -227,7 +220,6 @@ def test_func(*args):
 
     simulated_results['mse'] = simulated_mse
 
-
     # writing to file, 'generated_loss.bin'
     with open('generated_loss.bin', 'wb') as save_file:
         cPickle.dump(simulated_results, save_file, cPickle.HIGHEST_PROTOCOL)
@@ -246,7 +238,6 @@ eval_type_function = {
 
 
 def evaluate(eval_type, save_file):
-
     assert eval_type in eval_type_function, 'there is no type of evaluation {}, please check {}' \
         .format(eval_type, eval_type_function.keys())
 
@@ -255,6 +246,7 @@ def evaluate(eval_type, save_file):
     optimal_results = eval_func(save_file)
 
     print('dataset = {}, auc = {}'.format(optimal_results.dataset, optimal_results.auc))
+
 
 if __name__ == '__main__':
     args = parser_args()

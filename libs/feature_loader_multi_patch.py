@@ -1,9 +1,7 @@
 import numpy as np
 from concurrent import futures
 from threading import Thread
-import multiprocessing
 import random
-import time
 import h5py
 import sys
 import os
@@ -20,16 +18,18 @@ clip_feature = False
 def readHDF5(video_idx, random_idx, key):
     with h5py.File(video_idx, 'r') as f:
         if clip_feature:
-            batch_features = np.mean(f[key][:, :, :, max(0, random_idx - clip_length // 2):min(f[key].shape[3], random_idx + clip_length // 2)], axis=3)
+            batch_features = np.mean(f[key][:, :, :, max(0, random_idx - clip_length // 2):min(f[key].shape[3],
+                                                                                               random_idx + clip_length // 2)],
+                                     axis=3)
         else:
             batch_features = f[key][random_idx]
-        multi_patch_features = np.zeros([total_patches, batch_features.shape[2]],dtype=np.float32)
+        multi_patch_features = np.zeros([total_patches, batch_features.shape[2]], dtype=np.float32)
         t = 0
         for s in scales:
             step = int(np.ceil(feature_size / s))
             for i in range(0, int(feature_size), step):
                 for j in range(0, int(feature_size), step):
-                    temp = batch_features[i:min(i+step,int(feature_size)), j:min(j+step,int(feature_size))]
+                    temp = batch_features[i:min(i + step, int(feature_size)), j:min(j + step, int(feature_size))]
                     if temp.ndim == 3:
                         multi_patch_features[t] = np.mean(np.mean(temp, axis=0), axis=0)
                     elif temp.ndim == 2:
@@ -46,9 +46,10 @@ class HDF5Reader(object):
     def __call__(self, video_idx, random_idx, key):
         return readHDF5(video_idx, random_idx, key)
 
+
 def advance_batch(result, sequence_generator, HDF5_reader, pool):
     random_idx, video_idx = sequence_generator()
-    #debug
+    # debug
     # tmp1 = image_processor(images_path[0])
     # tmp2 = HDF5_reader(video_idx[0], random_idx[0])
 
@@ -56,12 +57,13 @@ def advance_batch(result, sequence_generator, HDF5_reader, pool):
     # result['optical_flow'] = HDF5_reader(video_idx[0], random_idx[0], 'optical_flow')
 
     rgb_keys = ['rgb'] * len(video_idx)
-    #optical_flow_keys = ['optical_flow'] * len(video_idx)
+    # optical_flow_keys = ['optical_flow'] * len(video_idx)
     rgb_feature = pool.map(HDF5_reader, video_idx, random_idx, rgb_keys)
-    #optical_flow_feature = pool.map(HDF5_reader, video_idx, random_idx, optical_flow_keys)
+    # optical_flow_feature = pool.map(HDF5_reader, video_idx, random_idx, optical_flow_keys)
 
     result['rgb'] = np.array(list(rgb_feature))
-    #result['optical_flow'] = np.array(list(optical_flow_feature))
+    # result['optical_flow'] = np.array(list(optical_flow_feature))
+
 
 class BatchAdvancer():
     def __init__(self, result, sequence_generator, HDF5_reader, pool):
@@ -139,13 +141,12 @@ class FeatureLoader(object):
             video_dict[video] = {}
             self.video_order.append(video)
 
-            #dataset, video_name = video.split('.')[0].split('_train')
+            # dataset, video_name = video.split('.')[0].split('_train')
             feature_hdf5_path = os.path.join(self.hdf5_path, video)
             print(feature_hdf5_path)
             with h5py.File(feature_hdf5_path, 'r') as f:
                 video_dict[video]['num_frames'] = f['rgb'].shape[0]
                 video_dict[video]['feature_hdf5_path'] = feature_hdf5_path
-
 
         self.video_dict = video_dict
         self.num_videos = len(video_dict.keys())
@@ -158,9 +159,9 @@ class FeatureLoader(object):
 
         self.HDF5_reader = HDF5Reader()
         self.pool = futures.ProcessPoolExecutor(max_workers=pool_size)
-        #self.pool = Pool(processes=pool_size)
+        # self.pool = Pool(processes=pool_size)
         self.batch_advancer = BatchAdvancer(self.thread_result, self.sequence_generator, self.HDF5_reader, self.pool)
-        #pre-load a batch
+        # pre-load a batch
         self.dispatch_worker()
         self.join_worker()
 
@@ -169,7 +170,6 @@ class FeatureLoader(object):
             self.join_worker()
         self.dispatch_worker()
         return self.thread_result
-
 
     def dispatch_worker(self):
         assert self.thread is None
@@ -181,7 +181,8 @@ class FeatureLoader(object):
         self.thread.join()
         self.thread = None
 
-#demo
+
+# demo
 if __name__ == "__main__":
 
     # python libs/feature_loader.py 1
@@ -198,7 +199,8 @@ if __name__ == "__main__":
 
         for train_test in ['training', 'testing']:
             # feature path
-            path = os.path.join(root, 'dataset/anomaly_detection', dataset, train_test, '224/features/twostream_res' + res_type + '_7x7')
+            path = os.path.join(root, 'dataset/anomaly_detection', dataset, train_test,
+                                '224/features/twostream_res' + res_type + '_7x7')
             files = os.listdir(path)
             files.sort()
             name_videos = ''
@@ -221,4 +223,4 @@ if __name__ == "__main__":
             rgb_feature = batch['rgb']
 
             print('rgb feature = {}'.format(rgb_feature.shape))
-            #print('optical flow feature = {}'.format(optical_flow_feature.shape))
+            # print('optical flow feature = {}'.format(optical_flow_feature.shape))

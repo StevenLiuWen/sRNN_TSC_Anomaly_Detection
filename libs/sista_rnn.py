@@ -4,10 +4,12 @@ from tensorflow.contrib.framework.python.ops.arg_scope import add_arg_scope
 import numpy as np
 from collections import OrderedDict
 
+
 # original tf.matmul is without an arg_scope decorator
 @add_arg_scope
 def matmul(*args, **kwargs):
     return tf.matmul(*args, **kwargs)
+
 
 def dim_reduction(x, w):
     _shape = x.get_shape().as_list()
@@ -16,6 +18,7 @@ def dim_reduction(x, w):
         x = matmul(x, w)
     x = tf.reshape(x, _shape[:-1] + [w.get_shape().as_list()[0]])
     return x
+
 
 class sista_rnn(object):
     def __init__(self, pre_input, now_input, n_hidden, K, gama, lambda1, lambda2, A_initializer, gw_initializer=None):
@@ -90,17 +93,20 @@ class sista_rnn(object):
             h = []
             for t in range(self.time_steps):
                 h_t_1_last_layer = h_t_1_all_layers[:, (self.K - 1) * self.n_hidden:]
-                delta = tf.tile(tf.exp(-tf.norm(self.input[t] - self.input[t + 1], axis=1, keep_dims=True)**2 / epsilon), [1, self.n_hidden])
-                h_t_kth_layer = self.__soft(matmul(h_t_1_last_layer, W_1) + matmul(self.input[t + 1], V), lambda1 / gama)
+                delta = tf.tile(
+                    tf.exp(-tf.norm(self.input[t] - self.input[t + 1], axis=1, keep_dims=True) ** 2 / epsilon),
+                    [1, self.n_hidden])
+                h_t_kth_layer = self.__soft(matmul(h_t_1_last_layer, W_1) + matmul(self.input[t + 1], V),
+                                            lambda1 / gama)
                 h_t_all_layers = h_t_kth_layer
 
                 for k in range(1, self.K):
                     W_k = lambda2 / gama * I
                     U_k = I - one / gama * AtA
                     h_t_kth_layer = self.__soft(tf.matmul(h_t_1_last_layer, W_k) * delta
-                                         + matmul(h_t_kth_layer, U_k) \
-                                         - matmul(h_t_kth_layer, W_k) * delta
-                                         + matmul(self.input[t + 1], V), lambda1 / gama)
+                                                + matmul(h_t_kth_layer, U_k) \
+                                                - matmul(h_t_kth_layer, W_k) * delta
+                                                + matmul(self.input[t + 1], V), lambda1 / gama)
                     h_t_all_layers = tf.concat([h_t_all_layers, h_t_kth_layer], axis=1)
                 h.append(h_t_all_layers)
                 h_t_1_all_layers = h_t_all_layers
@@ -123,10 +129,10 @@ class sista_rnn(object):
             lambda2 = self.__get_variable('lambda2', None, tf.constant(self.lambda2, tf.float32))
             h_0 = self.__get_variable('h_0', [self.batch_size, self.n_hidden], tf.zeros_initializer)
         parameters = OrderedDict([('A_{}'.format(i + 1), As[i]) for i in range(self.K)] + [
-                                  ('gama', gama),
-                                  ('lambda1', lambda1),
-                                  ('lambda2', lambda2),
-                                  ('h_0', h_0)])
+            ('gama', gama),
+            ('lambda1', lambda1),
+            ('lambda2', lambda2),
+            ('h_0', h_0)])
         epsilon = tf.constant(100, dtype=tf.float32)
         Ats = [tf.matrix_transpose(As[i]) for i in range(self.K)]
         AtAs = [tf.matmul(Ats[i], As[i]) for i in range(self.K)]
@@ -152,8 +158,11 @@ class sista_rnn(object):
             h = []
             for t in range(self.time_steps):
                 h_t_1_last_layer = h_t_1_all_layers[:, (self.K - 1) * self.n_hidden:]
-                delta = tf.tile(tf.exp(-tf.norm(self.input[t] - self.input[t + 1], axis=1, keep_dims=True)**2 / epsilon), [1, self.n_hidden])
-                h_t_kth_layer = self.__soft(matmul(h_t_1_last_layer, W_1) + matmul(self.input[t + 1], V), lambda1 / gama)
+                delta = tf.tile(
+                    tf.exp(-tf.norm(self.input[t] - self.input[t + 1], axis=1, keep_dims=True) ** 2 / epsilon),
+                    [1, self.n_hidden])
+                h_t_kth_layer = self.__soft(matmul(h_t_1_last_layer, W_1) + matmul(self.input[t + 1], V),
+                                            lambda1 / gama)
                 h_t_all_layers = h_t_kth_layer
 
                 for k in range(1, self.K):
@@ -165,9 +174,9 @@ class sista_rnn(object):
                     W_k = lambda2 / gama * I
                     U_k = I - one / gama * AtAs[k]
                     h_t_kth_layer = self.__soft(tf.matmul(h_t_1_last_layer, W_k) * delta
-                                         + matmul(h_t_kth_layer, U_k) \
-                                         - matmul(h_t_kth_layer, W_k) * delta
-                                         + matmul(self.input[t + 1], V), lambda1 / gama)
+                                                + matmul(h_t_kth_layer, U_k) \
+                                                - matmul(h_t_kth_layer, W_k) * delta
+                                                + matmul(self.input[t + 1], V), lambda1 / gama)
                     h_t_all_layers = tf.concat([h_t_all_layers, h_t_kth_layer], axis=1)
                 h.append(h_t_all_layers)
                 h_t_1_all_layers = h_t_all_layers
@@ -232,16 +241,17 @@ class sista_rnn(object):
             for t in range(self.time_steps):
                 h_t_1_last_layer = h_t_1_all_layers[:, (self.K - 1) * self.n_hidden:]
                 delta = deltas[t]
-                h_t_kth_layer = self.__soft(matmul(h_t_1_last_layer, W_1) + matmul(self.input[t + 1], V), lambda1 / gama)
+                h_t_kth_layer = self.__soft(matmul(h_t_1_last_layer, W_1) + matmul(self.input[t + 1], V),
+                                            lambda1 / gama)
                 h_t_all_layers = h_t_kth_layer
 
                 for k in range(1, self.K):
                     W_k = lambda2 / gama * I
                     U_k = I - one / gama * AtA
                     h_t_kth_layer = self.__soft(tf.matmul(h_t_1_last_layer, W_k) * delta
-                                         + matmul(h_t_kth_layer, U_k)
-                                         - matmul(h_t_kth_layer, W_k) * delta
-                                         + matmul(self.input[t + 1], V), lambda1 / gama)
+                                                + matmul(h_t_kth_layer, U_k)
+                                                - matmul(h_t_kth_layer, W_k) * delta
+                                                + matmul(self.input[t + 1], V), lambda1 / gama)
                     h_t_all_layers = tf.concat([h_t_all_layers, h_t_kth_layer], axis=1)
                 h.append(h_t_all_layers)
                 h_t_1_all_layers = h_t_all_layers
@@ -265,10 +275,10 @@ class sista_rnn(object):
             lambda2 = self.__get_variable('lambda2', None, tf.constant(self.lambda2, tf.float32))
             h_0 = self.__get_variable('h_0', [self.batch_size, self.n_hidden], tf.zeros_initializer)
         parameters = OrderedDict([('A_{}'.format(i + 1), As[i]) for i in range(self.K)] + [
-                                  ('gama', gama),
-                                  ('lambda1', lambda1),
-                                  ('lambda2', lambda2),
-                                  ('h_0', h_0)])
+            ('gama', gama),
+            ('lambda1', lambda1),
+            ('lambda2', lambda2),
+            ('h_0', h_0)])
         epsilon = tf.constant(100, dtype=tf.float32)
         Ats = [tf.matrix_transpose(As[i]) for i in range(self.K)]
         AtAs = [tf.matmul(Ats[i], As[i]) for i in range(self.K)]
@@ -302,7 +312,8 @@ class sista_rnn(object):
             for t in range(self.time_steps):
                 h_t_1_last_layer = h_t_1_all_layers[:, (self.K - 1) * self.n_hidden:]
                 delta = deltas[t]
-                h_t_kth_layer = self.__soft(matmul(h_t_1_last_layer, W_1) + matmul(self.input[t + 1], V), lambda1 / gama)
+                h_t_kth_layer = self.__soft(matmul(h_t_1_last_layer, W_1) + matmul(self.input[t + 1], V),
+                                            lambda1 / gama)
                 h_t_all_layers = h_t_kth_layer
 
                 for k in range(1, self.K):
@@ -314,9 +325,9 @@ class sista_rnn(object):
                     W_k = lambda2 / gama * I
                     U_k = I - one / gama * AtAs[k]
                     h_t_kth_layer = self.__soft(tf.matmul(h_t_1_last_layer, W_k) * delta
-                                         + matmul(h_t_kth_layer, U_k) \
-                                         - matmul(h_t_kth_layer, W_k) * delta
-                                         + matmul(self.input[t + 1], V), lambda1 / gama)
+                                                + matmul(h_t_kth_layer, U_k) \
+                                                - matmul(h_t_kth_layer, W_k) * delta
+                                                + matmul(self.input[t + 1], V), lambda1 / gama)
                     h_t_all_layers = tf.concat([h_t_all_layers, h_t_kth_layer], axis=1)
                 h.append(h_t_all_layers)
                 h_t_1_all_layers = h_t_all_layers
