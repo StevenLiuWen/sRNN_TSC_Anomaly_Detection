@@ -32,7 +32,7 @@ cd into Data folder of project and run the shell scripts (**ped1.sh, ped2.sh, av
 ```shell
 cd dataset/anomaly_detection
 ```
-Please manually download all datasets [ped2.tar.gz, avenue.tar.gz and shanghaitech.tar.gz](https://onedrive.live.com/?authkey=%21AMqh2fTSemfrokE&id=3705E349C336415F%215109&cid=3705E349C336415F)
+Please manually download all datasets [ped2.tar.gz, avenue.tar.gz and shanghaitech.tar.gz](http://101.32.75.151:8181/dataset/)
 and tar -xv each tar.gz file. Folders will be like dataset/anomaly_detection/avenue/....
 
 ## 3. Extracting feature
